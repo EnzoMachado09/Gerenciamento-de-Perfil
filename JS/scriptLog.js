@@ -1,28 +1,30 @@
 $(document).ready(function () {
     $('#loginForm').on('submit', function (event) {
-        event.preventDefault(); // Impede o envio do formulário para validação
+        event.preventDefault();
 
-        let email = $('#emailLogin').val();
+        let email = $('#emailOrCpfLogin').val();
         let senha = $('#senhaLogin').val();
+        let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
 
-        // Limpar erros
-        $('#emailLoginError').text('');
-        $('#senhaLoginError').text('');
+        let usuarioEncontrado = clientes.find(cliente => cliente.email === email && cliente.senha === senha);
 
-        // Verifica se o e-mail e senha estão preenchidos
-        if (email && senha) {
-            let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-            let usuario = usuarios.find(user => user.email === email && user.senha === senha);
-
-            if (usuario) {
-                alert('Login bem-sucedido!');
-                window.location.href = 'perfil.html'; // Redireciona para a página de perfil
-            } else {
-                $('#emailLoginError').text('E-mail ou senha inválidos.');
-            }
+        if (usuarioEncontrado) {
+            sessionStorage.setItem('loggedInUser', JSON.stringify(usuarioEncontrado));
+            alert('Login realizado com sucesso!');
+            window.location.href = 'perfil.html';
         } else {
-            if (!email) $('#emailLoginError').text('O campo e-mail é obrigatório.');
-            if (!senha) $('#senhaLoginError').text('O campo senha é obrigatório.');
+            $('#emailOrCpfLoginError').text('E-mail ou senha incorretos.');
         }
     });
+
+    function updateNavbar() {
+        let isLoggedIn = sessionStorage.getItem('loggedInUser') !== null;
+        if (isLoggedIn) {
+            $('#perfilLink').show();
+        } else {
+            $('#perfilLink').hide();
+        }
+    }
+
+    updateNavbar();
 });

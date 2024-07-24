@@ -1,64 +1,68 @@
 $(document).ready(function () {
     // Máscaras de entrada
-    $('#cpf').mask('000.000.000-00', { reverse: true });
     $('#telefone').mask('(00) 00000-0000');
 
-    // Verifica se o usuário está logado
-    let usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
-    if (usuarioLogado && usuarioLogado.logado) {
-        let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-        let usuario = usuarios.find(user => user.email === usuarioLogado.email);
+    let loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
-        if (usuario) {
-            $('#nome').val(usuario.nome);
-            $('#rg').val(usuario.rg);
-            $('#cpf').val(usuario.cpf);
-            $('#endereco').val(usuario.endereco);
-            $('#telefone').val(usuario.telefone);
-            $('#email').val(usuario.email);
-        }
-    } else {
-        // Redireciona para a página de login se o usuário não estiver logado
+    if (!loggedInUser) {
+        alert('Você precisa estar logado para acessar esta página.');
         window.location.href = 'login.html';
+        return;
     }
 
-    $('#perfilForm').on('submit', function (event) {
-        event.preventDefault(); // Impede o envio do formulário para validação
+    // Preencher os campos com os dados do usuário logado
+    $('#nome').val(loggedInUser.nome);
+    $('#rg').val(loggedInUser.rg);
+    $('#cpf').val(loggedInUser.cpf);
+    $('#endereco').val(loggedInUser.endereco);
+    $('#telefone').val(loggedInUser.telefone);
+    $('#email').val(loggedInUser.email);
 
-        let nome = $('#nome').val();
-        let rg = $('#rg').val();
-        let endereco = $('#endereco').val();
-        let telefone = $('#telefone').val();
+    $('#perfilForm').on('submit', function (event) {
+        event.preventDefault();
+
         let senhaAtual = $('#senhaAtual').val();
         let novaSenha = $('#novaSenha').val();
         let confirmarNovaSenha = $('#confirmarNovaSenha').val();
 
-        // Validação simples para verificar se a senha atual está correta
-        let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-        let usuario = usuarios.find(user => user.email === usuarioLogado.email);
-
-        if (usuario && usuario.senha === senhaAtual) {
-            if (novaSenha && novaSenha !== confirmarNovaSenha) {
-                alert('A nova senha e a confirmação da nova senha não correspondem.');
-            } else {
-                // Atualiza os dados do usuário
-                usuario.nome = nome;
-                usuario.rg = rg;
-                usuario.endereco = endereco;
-                usuario.telefone = telefone;
-                if (novaSenha) usuario.senha = novaSenha; // Atualiza a senha se fornecida
-
-                localStorage.setItem('usuarios', JSON.stringify(usuarios));
-                alert('Perfil atualizado com sucesso!');
-            }
-        } else {
+        if (senhaAtual !== loggedInUser.senha) {
             alert('Senha atual incorreta.');
+            return;
+        }
+
+        if (novaSenha && novaSenha !== confirmarNovaSenha) {
+            alert('A nova senha e a confirmação da nova senha não coincidem.');
+            return;
+        }
+
+        // Atualizar os dados do usuário
+        loggedInUser.nome = $('#nome').val();
+        loggedInUser.rg = $('#rg').val();
+        loggedInUser.endereco = $('#endereco').val();
+        loggedInUser.telefone = $('#telefone').val();
+        if (novaSenha) {
+            loggedInUser.senha = novaSenha;
+        }
+
+        // Atualizar no localStorage
+        let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+        let index = clientes.findIndex(cliente => cliente.email === loggedInUser.email);
+        if (index !== -1) {
+            clientes[index] = loggedInUser;
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+            alert('Perfil atualizado com sucesso!');
         }
     });
 
-    // Configurar botão de logout
-    $('#logoutLink').click(function () {
-        localStorage.removeItem('usuarioLogado');
-        window.location.href = 'login.html';
-    });
+    function updateNavbar() {
+        let isLoggedIn = sessionStorage.getItem('loggedInUser') !== null;
+        if (isLoggedIn) {
+            $('#perfilLink').show();
+        } else {
+            $('#perfilLink').hide();
+        }
+    }
+
+    updateNavbar();
 });

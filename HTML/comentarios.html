@@ -2,7 +2,9 @@
 <html lang="pt-BR">
 
 <head>
-    <title>Comentarios e Sugestoes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentários</title>
     <link rel="stylesheet" href="E:\FACUL\PROGRAMAÇÃO WEB\Trabalho 1\CSS\estilo.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -11,14 +13,14 @@
     <nav class="navbar">
         <ul>
             <li><a href="cadastro.html">Cadastro</a></li>
-            <li><a href="perfil.html">Perfil</a></li>
+            <li><a href="perfil.html" id="perfilLink">Perfil</a></li>
             <li><a href="comentarios.html">Comentários</a></li>
             <li><a href="login.html">Login</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <h2>Comentários e Sugestões</h2>
+        <h2>Comentários</h2>
         <form id="comentarioForm">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" required>
@@ -28,11 +30,12 @@
             <textarea id="comentario" name="comentario" required></textarea>
             <span class="error" id="comentarioError"></span>
 
-            <button type="submit">Enviar Comentário</button>
+            <button type="submit">Enviar</button>
         </form>
-        <h3>Comentários:</h3>
+
         <div id="comentariosList">
-            <!-- Comentários serão exibidos aqui -->
+            <h3>Comentários Anteriores</h3>
+            <ul id="listaComentarios"></ul>
         </div>
     </div>
     <script src="E:\FACUL\PROGRAMAÇÃO WEB\Trabalho 1\JS\scriptCom.js"></script>
