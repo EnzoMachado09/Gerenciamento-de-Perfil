@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <title>Comentarios e Sugestoes</title>
+    <link rel="stylesheet" href="E:\FACUL\PROGRAMAÇÃO WEB\Trabalho 1\CSS\estilo.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="cadastro.html">Cadastro</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+            <li><a href="comentarios.html">Comentários</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>Comentários e Sugestões</h2>
+        <form id="comentarioForm">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required>
+            <span class="error" id="nomeError"></span>
+
+            <label for="comentario">Comentário:</label>
+            <textarea id="comentario" name="comentario" required></textarea>
+            <span class="error" id="comentarioError"></span>
+
+            <button type="submit">Enviar Comentário</button>
+        </form>
+        <h3>Comentários:</h3>
+        <div id="comentariosList">
+            <!-- Comentários serão exibidos aqui -->
+        </div>
+    </div>
+    <script src="E:\FACUL\PROGRAMAÇÃO WEB\Trabalho 1\JS\scriptCom.js"></script>
+</body>
+
+</html>
