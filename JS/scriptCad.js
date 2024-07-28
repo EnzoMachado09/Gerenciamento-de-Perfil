@@ -1,52 +1,61 @@
 $(document).ready(function () {
-    // Máscaras de entrada
-    $('#cpf').mask('000.000.000-00', { reverse: true });
-    $('#telefone').mask('(00) 00000-0000');
+    $("#cpf").mask("000.000.000-00");
+    $("#rg").mask("00.000.000-0");
+    $("#telefone").mask("(00) 00000-0000");
     $('#cartaoCredito').mask('0000 0000 0000 0000');
     $('#cartaoDebito').mask('0000 0000 0000 0000');
 
-    // Mostrar/ocultar perfil com base no login
-    updateNavbar();
-
-    $('#cadastroForm').on('submit', function (event) {
+    $("#cadastroForm").on("submit", function (event) {
         event.preventDefault();
 
-        let nome = $('#nome').val();
-        let rg = $('#rg').val();
-        let cpf = $('#cpf').val();
-        let endereco = $('#endereco').val();
-        let telefone = $('#telefone').val();
-        let email = $('#email').val();
-        let senha = $('#senha').val();
-        let cartaoCredito = $('#cartaoCredito').val();
-        let cartaoDebito = $('#cartaoDebito').val();
-        let chavePix = $('#chavePix').val();
+        var nome = $("#nome").val();
+        var rg = $("#rg").val();
+        var cpf = $("#cpf").val();
+        var endereco = $("#endereco").val();
+        var telefone = $("#telefone").val();
+        var email = $("#email").val();
+        var senha = $("#senha").val();
+        var cartaoCredito = $("#cartaoCredito").val();
+        var cartaoDebito = $("#cartaoDebito").val();
+        var chavePix = $("#chavePix").val();
 
-        let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
-        clientes.push({
-            nome,
-            rg,
-            cpf,
-            endereco,
-            telefone,
-            email,
-            senha,
-            cartaoCredito,
-            cartaoDebito,
-            chavePix
-        });
+        var cliente = {
+            nome: nome,
+            rg: rg,
+            cpf: cpf,
+            endereco: endereco,
+            telefone: telefone,
+            email: email,
+            senha: senha,
+            cartaoCredito: cartaoCredito,
+            cartaoDebito: cartaoDebito,
+            chavePix: chavePix
+        };
 
-        localStorage.setItem('clientes', JSON.stringify(clientes));
-        alert('Cadastro realizado com sucesso!');
-        $('#cadastroForm')[0].reset();
+        localStorage.setItem("cliente", JSON.stringify(cliente));
+        alert("Cliente cadastrado com sucesso!");
+        window.location.href = "login.html";
     });
 
-    function updateNavbar() {
-        let isLoggedIn = sessionStorage.getItem('loggedInUser') !== null;
-        if (isLoggedIn) {
-            $('#perfilLink').show();
-        } else {
-            $('#perfilLink').hide();
-        }
-    }
+    $("#btLogout").click(function () {
+        localStorage.removeItem("loggedIn");
+        updateNavbar();
+        alert('Perfil Deslogado com sucesso!');
+        window.location.href = "login.html";
+    });
+
+    updateNavbar();
 });
+
+function updateNavbar() {
+    var isLoggedIn = localStorage.getItem("loggedIn");
+    if (isLoggedIn) {
+        $("#perfilLink").show();
+        $("#loginId").hide();
+        $("#btLogout").show();
+    } else {
+        $("#perfilLink").hide();
+        $("#loginId").show();
+        $("#btLogout").hide();
+    }
+}

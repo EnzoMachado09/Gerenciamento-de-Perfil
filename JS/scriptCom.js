@@ -1,36 +1,57 @@
-$(document).ready(function () {
-    $('#comentarioForm').on('submit', function (event) {
+$(document).ready(function() {
+    $("#comentarioForm").on("submit", function(event) {
         event.preventDefault();
 
-        let nome = $('#nome').val();
-        let comentario = $('#comentario').val();
+        var nome = $("#nome").val();
+        var comentario = $("#comentario").val();
 
-        let comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
-        comentarios.push({ nome, comentario });
+        if (!nome || !comentario) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
 
-        localStorage.setItem('comentarios', JSON.stringify(comentarios));
-        alert('Comentário enviado com sucesso!');
-        $('#comentarioForm')[0].reset();
-        loadComentarios();
+        var comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
+        comentarios.push({ nome: nome, comentario: comentario });
+        localStorage.setItem("comentarios", JSON.stringify(comentarios));
+
+        renderComentarios();
+        alert("Comentário enviado com sucesso!");
+        $("#comentarioForm")[0].reset();
     });
 
-    function loadComentarios() {
-        let comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
-        $('#listaComentarios').empty();
-        comentarios.forEach(function (comentario) {
-            $('#listaComentarios').append(`<li><strong>${comentario.nome}:</strong> ${comentario.comentario}</li>`);
-        });
-    }
+    renderComentarios();
 
-    function updateNavbar() {
-        let isLoggedIn = sessionStorage.getItem('loggedInUser') !== null;
-        if (isLoggedIn) {
-            $('#perfilLink').show();
-        } else {
-            $('#perfilLink').hide();
-        }
-    }
+    $("#btLogout").click(function() {
+        localStorage.removeItem("loggedIn");
+        updateNavbar();
+        alert('Perfil Deslogado com sucesso!');
+        window.location.href = "login.html";
+    });
 
     updateNavbar();
-    loadComentarios();
 });
+
+function renderComentarios() {
+    var comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
+    var comentariosList = $("#listaComentarios");
+    comentariosList.empty();
+
+    comentarios.forEach(function(c) {
+        comentariosList.append(
+            "<li><strong>" + c.nome + ":</strong> " + c.comentario + "</li>"
+        );
+    });
+}
+
+function updateNavbar() {
+    var isLoggedIn = localStorage.getItem("loggedIn");
+    if (isLoggedIn) {
+        $("#perfilLink").show();
+        $("#loginId").hide();
+        $("#btLogout").show();
+    } else {
+        $("#perfilLink").hide();
+        $("#loginId").show();
+        $("#btLogout").hide();
+    }
+}

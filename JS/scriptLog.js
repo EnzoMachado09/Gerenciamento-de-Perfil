@@ -1,30 +1,40 @@
 $(document).ready(function () {
-    $('#loginForm').on('submit', function (event) {
+    $("#loginForm").on("submit", function (event) {
         event.preventDefault();
 
-        let email = $('#emailOrCpfLogin').val();
-        let senha = $('#senhaLogin').val();
-        let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+        var emailOrCpfLogin = $("#emailOrCpfLogin").val();
+        var senhaLogin = $("#senhaLogin").val();
 
-        let usuarioEncontrado = clientes.find(cliente => cliente.email === email && cliente.senha === senha);
+        var cliente = JSON.parse(localStorage.getItem("cliente"));
 
-        if (usuarioEncontrado) {
-            sessionStorage.setItem('loggedInUser', JSON.stringify(usuarioEncontrado));
-            alert('Login realizado com sucesso!');
-            window.location.href = 'perfil.html';
+        if (!cliente) {
+            alert("Nenhum cliente cadastrado.");
+            return;
+        }
+
+        if (
+            (emailOrCpfLogin === cliente.email || emailOrCpfLogin === cliente.cpf) &&
+            senhaLogin === cliente.senha
+        ) {
+            alert("Login bem-sucedido!");
+            localStorage.setItem("loggedIn", true);
+            updateNavbar();
+            window.location.href = "perfil.html";
         } else {
-            $('#emailOrCpfLoginError').text('E-mail ou senha incorretos.');
+            alert("E-mail/CPF ou senha incorretos.");
         }
     });
 
-    function updateNavbar() {
-        let isLoggedIn = sessionStorage.getItem('loggedInUser') !== null;
-        if (isLoggedIn) {
-            $('#perfilLink').show();
-        } else {
-            $('#perfilLink').hide();
-        }
-    }
-
     updateNavbar();
 });
+
+function updateNavbar() {
+    var isLoggedIn = localStorage.getItem("loggedIn");
+    if (isLoggedIn) {
+        $("#perfilLink").show();
+        $("#loginId").hide();
+    } else {
+        $("#perfilLink").hide();
+        $("#loginId").show();
+    }
+}
