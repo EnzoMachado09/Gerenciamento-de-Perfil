@@ -63,6 +63,8 @@ function excluirCliente() {
           email: email
       };
   
+      var clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+
       // Faz uma requisição POST para o endpoint PHP
       fetch('../PHP/excluir_cliente.php', {
           method: 'POST', // Método HTTP POST para exclusão
@@ -76,8 +78,11 @@ function excluirCliente() {
           // Exibe a mensagem do servidor
           alert(data.mensagem); // Exibe uma mensagem para o usuário
           if (data.sucesso) {
-              // Se a exclusão for bem-sucedida, oculta a div de informações do cliente
-              document.getElementById('infoCliente').setAttribute("hidden", "");
+            // Se a exclusão for bem-sucedida, oculta a div de informações do cliente
+            document.getElementById('infoCliente').setAttribute("hidden", "");
+
+            clientes = clientes.filter(c => c.email !== dadosExclusao.email);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
           }
       })
       .catch(error => console.error('Erro ao excluir cliente:', error));
