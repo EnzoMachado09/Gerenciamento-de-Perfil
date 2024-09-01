@@ -31,7 +31,8 @@ $(document).ready(function () {
             senha: senha,
             cartaoCredito: cartaoCredito,
             cartaoDebito: cartaoDebito,
-            chavePix: chavePix
+            chavePix: chavePix,
+            adm: 0
         };
 
         // Verificação de cliente existente
@@ -45,8 +46,23 @@ $(document).ready(function () {
             clientes.push(cliente);
             localStorage.setItem('clientes', JSON.stringify(clientes));
             localStorage.setItem("cliente", JSON.stringify(cliente));
+
+            fetch('../PHP/cadastrar_usuario.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cliente)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert(data.mensagem);
+            })
+            .catch(error => console.error('Erro ao cadastrar usuário:', error));
+
             alert("Cliente cadastrado com sucesso!");
-            window.location.href = "login.html";
+            window.location.href = "perfil.html";
         }
     });
 
@@ -55,7 +71,7 @@ $(document).ready(function () {
         localStorage.removeItem("logado");
         attMenu();
         alert('Perfil deslogado com sucesso!');
-        window.location.href = "login.html";
+        window.location.href = "../../index.html";
     });
 
     // Atualização do menu
@@ -69,9 +85,17 @@ function attMenu() {
         $("#perfilLink").show();
         $("#loginId").hide();
         $("#btLogout").show();
+        $("#consultaId").hide();
+
+        //Verifica se usuário é ADM
+        var cliente = JSON.parse(localStorage.getItem("clienteLogado"));
+        if(cliente.adm == 1)
+            $("#consultaId").show();
+
     } else {
         $("#perfilLink").hide();
         $("#loginId").show();
         $("#btLogout").hide();
+        $("#consultaId").hide();
     }
 }

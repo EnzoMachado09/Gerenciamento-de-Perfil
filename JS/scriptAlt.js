@@ -5,9 +5,8 @@ $(document).ready(function () {
         window.location.href = "index.html";
         return;
     }
-    
-    var cliente = JSON.parse(localStorage.getItem("clienteLogado"));
-    renderPedidos(cliente.id);
+
+    var cliente = JSON.parse(localStorage.getItem("clienteEditar"));
 
     // Preenchimento dos campos do formulário
     $("#nome").val(cliente.nome);
@@ -31,14 +30,6 @@ $(document).ready(function () {
         event.preventDefault();
         // Obtenção dos dados do formulário
 
-        var senha = $("#novaSenha").val();
-        var confirmarSenha = $("#confirmarNovaSenha").val();
-
-        // Validação dos campos
-        if (senha && senha !== confirmarSenha) {
-            alert("As senhas não coincidem.");
-            return;
-        }
 
         // Atualização dos dados do cliente
         cliente.nome = $("#nome").val();
@@ -47,7 +38,6 @@ $(document).ready(function () {
         cliente.endereco = $("#endereco").val();
         cliente.telefone = $("#telefone").val();
         cliente.email = $("#email").val();
-        cliente.senha = senha ? senha : cliente.senha;
         cliente.cartaoCredito = $("#cartaoCredito").val();
         cliente.cartaoDebito = $("#cartaoDebito").val();
         cliente.chavePix = $("#chavePix").val();
@@ -92,39 +82,14 @@ $(document).ready(function () {
         localStorage.removeItem("clienteLogado");
         attMenu();
         alert('Perfil deslogado com sucesso!');
-        window.location.href = "../../index.html";
+        window.location.href = "index.html";
     });
 
     // Atualização do menu
     attMenu();
 });
 
-function renderPedidos(id) {
-    const dadosUsuario = {
-        id_cliente: id
-    };
-
-    fetch('../PHP/buscar_pedidos.php', {
-        method: 'POST', // Método HTTP POST para envio
-        headers: {
-            'Content-Type': 'application/json' // Define o tipo de conteúdo como JSON
-        },
-        body: JSON.stringify(dadosUsuario) // Converte o objeto para JSON
-        })
-        .then(response => response.json()) // Converte a resposta para um objeto JavaScript
-        .then(data => {
-                    var pedidosList = $("#listaPedidos");
-                    pedidosList.empty();
-                    
-                    data.pedidos.forEach(p => {
-                        pedidosList.append(
-                            "<li><strong> Quantidade:</strong> " + p.QUANTIDADE + " - <strong> Descrição:</strong> " + p.DESCRICAO + " - <strong> Valor:</strong> " + p.VALOR + "</li>"
-                        );
-                    });
-                })
-                .catch(error => console.error('Erro ao carregar pedidos:', error));
-  }
-
+// Função para atualizar o menu de navegação
 // Função para atualizar o menu de navegação
 function attMenu() {
     var estaLogado = localStorage.getItem("logado");
