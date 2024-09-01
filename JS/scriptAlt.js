@@ -9,15 +9,15 @@ $(document).ready(function () {
     var cliente = JSON.parse(localStorage.getItem("clienteEditar"));
 
     // Preenchimento dos campos do formulário
-    $("#nome").val(cliente.nome);
-    $("#rg").val(cliente.rg);
-    $("#cpf").val(cliente.cpf);
-    $("#endereco").val(cliente.endereco);
-    $("#telefone").val(cliente.telefone);
-    $("#email").val(cliente.email);
-    $("#cartaoCredito").val(cliente.cartaoCredito);
-    $("#cartaoDebito").val(cliente.cartaoDebito);
-    $("#chavePix").val(cliente.chavePix);
+    $("#nome").val(cliente.NOME);
+    $("#rg").val(cliente.RG);
+    $("#cpf").val(cliente.CPF);
+    $("#endereco").val(cliente.ENDERECO);
+    $("#telefone").val(cliente.TELEFONE);
+    $("#email").val(cliente.EMAIL);
+    $("#cartaoCredito").val(cliente.C_CREDITO);
+    $("#cartaoDebito").val(cliente.C_DEBITO);
+    $("#chavePix").val(cliente.PIX);
 
     // Máscaras
     $("#cpf").mask("000.000.000-00");

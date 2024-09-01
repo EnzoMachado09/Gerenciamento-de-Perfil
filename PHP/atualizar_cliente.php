@@ -53,7 +53,6 @@ $stmt->bind_param("ssssssss", $nome, $endereco, $telefone, $senha, $cartaoCredit
 // Executa a atualização
 if ($stmt->execute()) {
     echo json_encode(["mensagem" => "Dados do cliente atualizados com sucesso!", "sucesso" => true]);
-    var_dump("blablabla");
 } else {
     echo json_encode(["mensagem" => "Erro ao atualizar os dados do cliente: " . $stmt->error, "sucesso" => false]);
 }

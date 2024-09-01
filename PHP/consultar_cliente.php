@@ -4,7 +4,7 @@ header("Content-Type: application/json; charset=UTF-8"); // Define o tipo de con
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "banco"; // Substitua pelo nome do seu banco de dados
+$dbname = "banco";
 
 // Cria a conexão com o banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);

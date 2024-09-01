@@ -77,7 +77,7 @@ function excluirCliente() {
           alert(data.mensagem); // Exibe uma mensagem para o usuário
           if (data.sucesso) {
               // Se a exclusão for bem-sucedida, oculta a div de informações do cliente
-              document.getElementById('infoCliente').setAttribute("hidden");
+              document.getElementById('infoCliente').setAttribute("hidden", "");
           }
       })
       .catch(error => console.error('Erro ao excluir cliente:', error));
